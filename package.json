@@ -1,0 +1,151 @@
+{
+  "name": "kiro-discord-presence",
+  "displayName": "Kiro Discord Presence",
+  "description": "Discord Rich Presence for Kiro IDE (and VS Code) with privacy-first defaults.",
+  "version": "0.1.0",
+  "publisher": "kiro",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ts2gamer22/KiroView.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": ["Other"],
+  "main": "./out/extension.js",
+  "icon": "media/icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "extensionKind": ["ui", "workspace"],
+  "contributes": {
+    "commands": [
+      {
+        "command": "kiroPresence.toggle",
+        "title": "Kiro Presence: Toggle"
+      },
+      {
+        "command": "kiroPresence.reconnect",
+        "title": "Kiro Presence: Reconnect"
+      },
+      {
+        "command": "kiroPresence.openSettings",
+        "title": "Kiro Presence: Open Settings"
+      },
+      {
+        "command": "kiroPresence.diagnostics",
+        "title": "Kiro Presence: Diagnostics"
+      },
+      {
+        "command": "kiroPresence.togglePrivacyMode",
+        "title": "Kiro Presence: Toggle Privacy Mode"
+      },
+      {
+        "command": "kiroPresence.toggleElapsedTime",
+        "title": "Kiro Presence: Toggle Elapsed Time"
+      }
+    ],
+    "configuration": {
+      "title": "Kiro Discord Presence",
+      "properties": {
+        "kiroPresence.privacyMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "When enabled, do not show filenames, workspace names, or git data, regardless of other settings."
+        },
+        "kiroPresence.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Discord Rich Presence integration."
+        },
+        "kiroPresence.discordClientId": {
+          "type": "string",
+          "default": "",
+          "description": "Discord Application Client ID used for Rich Presence. Required for activity to display icons/buttons."
+        },
+        "kiroPresence.showFileName": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show the active file name in presence (redacts by default)."
+        },
+        "kiroPresence.showWorkspaceName": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show the workspace or repository name in presence."
+        },
+        "kiroPresence.idleTimeoutMs": {
+          "type": "number",
+          "default": 90000,
+          "minimum": 10000,
+          "description": "After this idle time, switch to an idle presence."
+        },
+        "kiroPresence.showElapsedTime": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show elapsed time since session start."
+        },
+        "kiroPresence.resetElapsedTimePerFile": {
+          "type": "boolean",
+          "default": false,
+          "description": "Reset elapsed time when switching files."
+        },
+        "kiroPresence.buttons.enableRepositoryButton": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show a 'View Project' button when a VCS remote URL is detected."
+        },
+        "kiroPresence.redactPatterns": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["**/*.env", "**/*secret*", "**/.env.*"],
+          "description": "Glob patterns of files to always redact from presence."
+        },
+        "kiroPresence.largeImage": {
+          "type": "string",
+          "enum": ["auto", "kiro", "vscode"],
+          "default": "auto",
+          "description": "Pick which large image key to use for presence assets."
+        },
+        "kiroPresence.showProblems": {
+          "type": "boolean",
+          "default": false,
+          "description": "Append problems (errors/warnings) count to presence state."
+        },
+        "kiroPresence.showGitBranch": {
+          "type": "boolean",
+          "default": false,
+          "description": "Append current Git branch to presence state (uses built-in Git extension when available)."
+        },
+        "kiroPresence.showCursorPosition": {
+          "type": "boolean",
+          "default": false,
+          "description": "Append current cursor position (line/column) to presence state."
+        },
+        "kiroPresence.debug": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable verbose logging in the extension host."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "npx @vscode/vsce package",
+    "publish:ovsx": "npx ovsx publish",
+    "lint": "echo 'no linter configured'"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "minimatch": "^9.0.4"
+  }
+}
+
+

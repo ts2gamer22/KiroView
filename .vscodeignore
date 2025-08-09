@@ -1,0 +1,28 @@
+# Exclude sources and local configs (ship compiled code in out/)
+src/**
+.vscode/**
+.github/**
+**/*.map
+**/*.test.*
+test/**
+tests/**
+
+# Tooling/config not needed at runtime
+tsconfig.json
+eslint.config.*
+.eslintrc.*
+.prettier*
+pnpm-lock.yaml
+yarn.lock
+pnpm-workspace.yaml
+
+# Trim node_modules bloat that isn't required at runtime
+node_modules/**/test/**
+node_modules/**/tests/**
+node_modules/**/docs/**
+node_modules/**/example/**
+node_modules/**/examples/**
+node_modules/**/benchmark/**
+
+# Keep: out/**, package.json, README.md, LICENSE, media/**, node_modules/** (runtime deps)
+
