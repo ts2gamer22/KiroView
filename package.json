@@ -1,7 +1,7 @@
 {
   "name": "kiro-activity-status",
   "displayName": "KiroView: Discord Rich Presence for Kiro",
-  "description": "Show Kiro IDE activity on Discord",
+  "description": "Show your coding activity on Discord - supports Kiro IDE",
   "version": "1.0.5",
   "publisher": "TheVibinNetwork",
   "license": "MIT",
@@ -22,7 +22,8 @@
     "status",
     "activity",
     "presence",
-    "integration"
+    "integration",
+    "gaming"
   ],
   "homepage": "https://github.com/ts2gamer22/KiroView",
   "bugs": {

@@ -1,6 +1,6 @@
 # Kiro Activity Status
 
-Activity status integration for Kiro IDE (and VS Code) with privacy‑first defaults.
+Activity status integration for Kiro IDE with privacy‑first defaults.
 
 ## Features
 
@@ -44,9 +44,15 @@ workers-dark, yarn-light
 
 That's it! The extension works immediately with no additional setup required.
 
+## Installation
+
+### For Kiro IDE Users (Recommended):
+1. **Open VSX Registry**: Install from [Open VSX](https://open-vsx.org/extension/TheVibinNetwork/kiro-activity-status)
+2. **Or via Command**: `Ctrl+Shift+P` → "Extensions: Install from VSIX" → Download from releases
+
 ## Quick Start
 
-1. **Install Extension**: Install from VS Code Marketplace or Open VSX
+1. **Install Extension**: Use installation method above
 2. **Discord App**: Ensure Discord desktop app is running
 3. **Ready to Use**: Extension works immediately - no configuration needed!
 
@@ -109,8 +115,8 @@ npm run package
 
 ## Publishing
 
-- **VS Code Marketplace** (optional): `npx @vscode/vsce publish`
 - **Open VSX** (recommended for Kiro): `npx ovsx publish -p <token>`
+- **VS Code Marketplace**: `npx @vscode/vsce publish`
 
 ## Troubleshooting
 
