@@ -2,7 +2,7 @@
   "name": "kiro-activity-status",
   "displayName": "Kiro Activity Status",
   "description": "Show your Kiro IDE activity status with external integrations.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "TheVibinNetwork",
   "license": "MIT",
   "repository": {
