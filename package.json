@@ -1,24 +1,39 @@
 {
-  "name": "kiro-discord-presence",
-  "displayName": "Kiro Discord Presence",
-  "description": "Discord Rich Presence for Kiro IDE (and VS Code) with privacy-first defaults.",
-  "version": "0.1.0",
-  "publisher": "kiro",
+  "name": "kiro-activity-status",
+  "displayName": "Kiro Activity Status",
+  "description": "Show your Kiro IDE activity status with external integrations.",
+  "version": "1.0.1",
+  "publisher": "TheVibinNetwork",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ts2gamer22/KiroView.git"
+    "url": "https://github.com/ts2gamer22/KiroView"
   },
   "engines": {
     "vscode": "^1.85.0"
   },
-  "categories": ["Other"],
-  "main": "./out/extension.js",
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "status",
+    "activity",
+    "integration",
+    "productivity"
+  ],
+  "homepage": "https://github.com/ts2gamer22/KiroView",
+  "bugs": {
+    "url": "https://github.com/ts2gamer22/KiroView/issues"
+  },
+  "main": "./dist/extension.js",
   "icon": "media/icon.png",
   "activationEvents": [
     "onStartupFinished"
   ],
-  "extensionKind": ["ui", "workspace"],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
   "contributes": {
     "commands": [
       {
@@ -36,24 +51,11 @@
       {
         "command": "kiroPresence.diagnostics",
         "title": "Kiro Presence: Diagnostics"
-      },
-      {
-        "command": "kiroPresence.togglePrivacyMode",
-        "title": "Kiro Presence: Toggle Privacy Mode"
-      },
-      {
-        "command": "kiroPresence.toggleElapsedTime",
-        "title": "Kiro Presence: Toggle Elapsed Time"
       }
     ],
     "configuration": {
-      "title": "Kiro Discord Presence",
+      "title": "Discord Rich Presence",
       "properties": {
-        "kiroPresence.privacyMode": {
-          "type": "boolean",
-          "default": true,
-          "description": "When enabled, do not show filenames, workspace names, or git data, regardless of other settings."
-        },
         "kiroPresence.enabled": {
           "type": "boolean",
           "default": true,
@@ -61,8 +63,8 @@
         },
         "kiroPresence.discordClientId": {
           "type": "string",
-          "default": "",
-          "description": "Discord Application Client ID used for Rich Presence. Required for activity to display icons/buttons."
+          "default": "1403518715407892590",
+          "description": "Discord Application Client ID used for Rich Presence. Uses default Kiro app if not set. Only change if you want to use your own Discord app with custom assets."
         },
         "kiroPresence.showFileName": {
           "type": "boolean",
@@ -80,16 +82,6 @@
           "minimum": 10000,
           "description": "After this idle time, switch to an idle presence."
         },
-        "kiroPresence.showElapsedTime": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show elapsed time since session start."
-        },
-        "kiroPresence.resetElapsedTimePerFile": {
-          "type": "boolean",
-          "default": false,
-          "description": "Reset elapsed time when switching files."
-        },
         "kiroPresence.buttons.enableRepositoryButton": {
           "type": "boolean",
           "default": false,
@@ -97,13 +89,23 @@
         },
         "kiroPresence.redactPatterns": {
           "type": "array",
-          "items": { "type": "string" },
-          "default": ["**/*.env", "**/*secret*", "**/.env.*"],
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "**/*.env",
+            "**/*secret*",
+            "**/.env.*"
+          ],
           "description": "Glob patterns of files to always redact from presence."
         },
         "kiroPresence.largeImage": {
           "type": "string",
-          "enum": ["auto", "kiro", "vscode"],
+          "enum": [
+            "auto",
+            "kiro",
+            "vscode"
+          ],
           "default": "auto",
           "description": "Pick which large image key to use for presence assets."
         },
@@ -122,6 +124,11 @@
           "default": false,
           "description": "Append current cursor position (line/column) to presence state."
         },
+        "kiroPresence.showLanguageIcons": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show language-specific small icons in Discord presence (requires Discord app assets)."
+        },
         "kiroPresence.debug": {
           "type": "boolean",
           "default": false,
@@ -131,21 +138,24 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
-    "package": "npx @vscode/vsce package",
+    "compile": "npm run check-types && node esbuild.js",
+    "check-types": "tsc --noEmit",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "vscode:prepublish": "npm run package",
+    "package": "npm run check-types && node esbuild.js --production",
     "publish:ovsx": "npx ovsx publish",
     "lint": "echo 'no linter configured'"
   },
   "devDependencies": {
     "@types/node": "^20.12.12",
     "@types/vscode": "^1.85.0",
+    "esbuild": "^0.19.0",
+    "npm-run-all": "^4.1.5",
     "typescript": "^5.4.5"
   },
   "dependencies": {
     "minimatch": "^9.0.4"
   }
 }
-
-

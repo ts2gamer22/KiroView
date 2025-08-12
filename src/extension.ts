@@ -47,20 +47,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.executeCommand('workbench.action.openSettings', 'Kiro Discord Presence');
   };
 
-  const handleTogglePrivacy = async () => {
-    const c = vscode.workspace.getConfiguration('kiroPresence');
-    const current = c.get<boolean>('privacyMode', true);
-    await c.update('privacyMode', !current, vscode.ConfigurationTarget.Global);
-    vscode.window.showInformationMessage(`Kiro Presence Privacy Mode ${!current ? 'enabled' : 'disabled'}.`);
-  };
-
-  const handleToggleElapsed = async () => {
-    const c = vscode.workspace.getConfiguration('kiroPresence');
-    const current = c.get<boolean>('showElapsedTime', true);
-    await c.update('showElapsedTime', !current, vscode.ConfigurationTarget.Global);
-    vscode.window.showInformationMessage(`Kiro Presence Elapsed Time ${!current ? 'enabled' : 'disabled'}.`);
-  };
-
   const handleDiagnostics = () => {
     const cfg = vscode.workspace.getConfiguration('kiroPresence');
     const clientId = (cfg.get<string>('discordClientId') || '').trim();
@@ -78,8 +64,6 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.commands.registerCommand('kiroPresence.reconnect', handleReconnect),
     vscode.commands.registerCommand('kiroPresence.openSettings', handleOpenSettings),
     vscode.commands.registerCommand('kiroPresence.diagnostics', handleDiagnostics),
-    vscode.commands.registerCommand('kiroPresence.togglePrivacyMode', handleTogglePrivacy),
-    vscode.commands.registerCommand('kiroPresence.toggleElapsedTime', handleToggleElapsed),
   ];
 
   context.subscriptions.push(...disposeAll);

@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { AppEnvironment } from '../environment/appEnvironmentDetector';
-import { KNOWN_LANGUAGES } from '../data/languages';
+import { findLanguageMapping } from '../data/languages';
 
 export type PresenceSettings = {
   showFileName: boolean;
@@ -9,6 +9,7 @@ export type PresenceSettings = {
   showProblems?: boolean;
   showGitBranch?: boolean;
   showCursorPosition?: boolean;
+  showLanguageIcons?: boolean;
 };
 
 export type ActivityPayload = {
@@ -38,6 +39,11 @@ export const buildEditorActivity = (
   const languageId = editor?.document?.languageId;
   const cursor = editor ? { line: editor.selection.active.line + 1, col: editor.selection.active.character + 1 } : undefined;
 
+  // Find language mapping for small image
+  const languageMapping = findLanguageMapping(fileName, languageId);
+  const small_image = settings.showLanguageIcons !== false ? (languageMapping?.smallImageKey || languageSmallImage) : undefined;
+  const small_text = languageMapping?.label || languageId;
+
   const details = editor?.document
     ? settings.showFileName && fileName
       ? `Editing ${fileName}`
@@ -45,17 +51,19 @@ export const buildEditorActivity = (
     : 'Browsing';
 
   const parts: string[] = [];
-  if (settings.showWorkspaceName && workspaceName) parts.push(`in ${workspaceName}`);
-  if (!settings.showWorkspaceName && languageId) parts.push(languageId);
-  if (settings.showCursorPosition && cursor) parts.push(`Ln ${cursor.line}, Col ${cursor.col}`);
+  if (settings.showWorkspaceName && workspaceName) {
+    parts.push(`in ${workspaceName}`);
+  }
+  if (settings.showCursorPosition && cursor) {
+    parts.push(`Ln ${cursor.line}, Col ${cursor.col}`);
+  }
   const state = parts.join(' · ') || undefined;
 
-  const small_image = languageSmallImage ?? (languageId ? KNOWN_LANGUAGES[languageId] : undefined);
   const assets = {
     large_image,
     large_text,
     small_image,
-    small_text: languageId,
+    small_text,
   };
 
   return { details, state, assets };

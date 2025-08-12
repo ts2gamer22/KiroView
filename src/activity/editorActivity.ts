@@ -3,11 +3,9 @@ import { DiscordIpcClient } from '../ipc/discordIpcClient';
 import { AppEnvironment } from '../environment/appEnvironmentDetector';
 import { buildEditorActivity } from '../presence/presenceMapper';
 import { createIdleTimer } from './idleTimer';
-import { createRedactor } from '../helpers/redaction';
-import { readProblems } from '../helpers/problems';
-import { readGitBranch } from '../helpers/gitBranch';
-import { readEffectiveConfig } from '../config';
-import { detectRepositoryUrl } from '../helpers/repoButton';
+import { createRedactor } from '../presence/redaction';
+import { readProblems } from '../presence/problems';
+import { readGitBranch } from '../presence/gitBranch';
 
 export type EditorActivityOptions = {
   env: AppEnvironment;
@@ -18,26 +16,28 @@ export const registerEditorActivity = ({ env, client }: EditorActivityOptions): 
   const disposables: vscode.Disposable[] = [];
 
   const update = async () => {
-    const cfg = readEffectiveConfig();
-    const enabled = cfg.enabled;
+    const cfg = vscode.workspace.getConfiguration('kiroPresence');
+    const enabled = cfg.get<boolean>('enabled', true);
     if (!enabled) {
       client.clearActivity();
       return;
     }
 
     const settings = {
-      showFileName: cfg.showFileName,
-      showWorkspaceName: cfg.showWorkspaceName,
-      largeImage: cfg.largeImage,
-      showProblems: cfg.showProblems,
-      showGitBranch: cfg.showGitBranch,
-      showCursorPosition: cfg.showCursorPosition,
+      showFileName: cfg.get<boolean>('showFileName', false),
+      showWorkspaceName: cfg.get<boolean>('showWorkspaceName', false),
+      largeImage: cfg.get<'auto' | 'kiro' | 'vscode'>('largeImage', 'auto'),
+      showProblems: cfg.get<boolean>('showProblems', false),
+      showGitBranch: cfg.get<boolean>('showGitBranch', false),
+      showCursorPosition: cfg.get<boolean>('showCursorPosition', false),
+      showLanguageIcons: cfg.get<boolean>('showLanguageIcons', true),
     };
 
     const editor = vscode.window.activeTextEditor;
     const workspaceName = vscode.workspace.name ?? undefined;
-    const redactor = createRedactor(cfg.redactPatterns);
+    const redactor = createRedactor(cfg.get<string[]>('redactPatterns', []));
     const activity = buildEditorActivity(env, settings, editor, workspaceName);
+    
     // Apply simple redaction of filename if pattern matched
     if (!settings.showFileName && editor?.document) {
       // nothing to do, hidden by setting
@@ -47,6 +47,7 @@ export const registerEditorActivity = ({ env, client }: EditorActivityOptions): 
         activity.details = 'Editing';
       }
     }
+    
     // Problems
     if (settings.showProblems) {
       const { errors, warnings } = readProblems();
@@ -60,25 +61,6 @@ export const registerEditorActivity = ({ env, client }: EditorActivityOptions): 
       if (branch) activity.state = activity.state ? `${activity.state} · ${branch}` : branch;
     }
 
-    // Elapsed time
-    if (cfg.showElapsedTime) {
-      const now = Date.now();
-      if (cfg.resetElapsedTimePerFile && editor?.document) {
-        // simplistic: always restart timestamp on each update if reset per file is on
-        activity.timestamps = { start: Math.floor(now / 1000) };
-      } else {
-        activity.timestamps = activity.timestamps ?? { start: Math.floor(now / 1000) };
-      }
-    }
-
-    // Buttons
-    if (cfg.buttons?.enableRepositoryButton) {
-      const repoUrl = await detectRepositoryUrl();
-      if (repoUrl) {
-        activity.buttons = [{ label: 'View Project', url: repoUrl }];
-      }
-    }
-
     client.setActivity(activity as unknown as Record<string, unknown>);
   };
 
@@ -90,9 +72,15 @@ export const registerEditorActivity = ({ env, client }: EditorActivityOptions): 
   }));
 
   // idle handling
-  const idleTimer = createIdleTimer(readEffectiveConfig().idleTimeoutMs);
-  idleTimer.onIdle(() => client.setActivity({ details: 'Idle', state: vscode.workspace.name ?? undefined }));
-  idleTimer.onActive(() => void update());
+  const idleTimeout = vscode.workspace.getConfiguration('kiroPresence').get<number>('idleTimeoutMs', 90000);
+  const idleTimer = createIdleTimer(idleTimeout);
+  idleTimer.onIdle(() => {
+    const cfg = vscode.workspace.getConfiguration('kiroPresence');
+    const showWorkspaceName = cfg.get<boolean>('showWorkspaceName', false);
+    const state = showWorkspaceName ? vscode.workspace.name ?? undefined : undefined;
+    client.setActivity({ details: 'Idle', state });
+  });
+  idleTimer.onActive(update);
 
   disposables.push(
     vscode.window.onDidChangeWindowState((s) => (s.focused ? idleTimer.markActive() : undefined))
@@ -100,7 +88,7 @@ export const registerEditorActivity = ({ env, client }: EditorActivityOptions): 
   disposables.push(vscode.workspace.onDidChangeTextDocument(() => idleTimer.markActive()));
 
   // initial
-  void update();
+  update();
 
   return new vscode.Disposable(() => {
     idleTimer.dispose();

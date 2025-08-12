@@ -1,28 +1,72 @@
-# Exclude sources and local configs (ship compiled code in out/)
-src/**
-.vscode/**
-.github/**
-**/*.map
-**/*.test.*
-test/**
-tests/**
+# Development and source files (bundled into dist/)
+src/
+out/
+node_modules/
+cursor_plan_for_discord_presence_extens.md
+design.md
+tasks.md
+.gitignore
 
-# Tooling/config not needed at runtime
+# Development configuration
+.vscode/
 tsconfig.json
-eslint.config.*
-.eslintrc.*
-.prettier*
-pnpm-lock.yaml
+esbuild.js
+
+# Build artifacts
+*.tsbuildinfo
+
+# Git files
+.git/
+.gitignore
+
+# Development scripts and configs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Coverage and test files
+coverage/
+*.lcov
+.nyc_output/
+.vscode-test/
+
+# Environment files
+.env*
+.env.local
+.env.*.local
+
+# Package manager files
+package-lock.json
 yarn.lock
-pnpm-workspace.yaml
+pnpm-lock.yaml
 
-# Trim node_modules bloat that isn't required at runtime
-node_modules/**/test/**
-node_modules/**/tests/**
-node_modules/**/docs/**
-node_modules/**/example/**
-node_modules/**/examples/**
-node_modules/**/benchmark/**
+# Source maps (not needed in production)
+**/*.js.map
 
-# Keep: out/**, package.json, README.md, LICENSE, media/**, node_modules/** (runtime deps)
+# GitHub workflows (CI/CD not needed in extension)
+.github/
+
+# Keep essential runtime files:
+# - README.md for marketplace display
+# - LICENSE for legal requirements
+# - media/ for extension icon
+# - dist/ for bundled JavaScript
+# - package.json for extension manifest
 
