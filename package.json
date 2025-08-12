@@ -2,7 +2,7 @@
   "name": "kiro-activity-status",
   "displayName": "KiroView: Discord Rich Presence for Kiro",
   "description": "Show Kiro IDE activity on Discord",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "publisher": "TheVibinNetwork",
   "license": "MIT",
   "repository": {
