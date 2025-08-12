@@ -30,11 +30,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     return;
   }
 
-  const handleToggle = async () => {
-    const current = config.get<boolean>('enabled', true);
-    await config.update('enabled', !current, vscode.ConfigurationTarget.Global);
-    vscode.window.showInformationMessage(`Kiro Presence ${!current ? 'enabled' : 'disabled'}.`);
-  };
+
 
   const handleReconnect = async () => {
     if (!ipcClient) return;
@@ -43,8 +39,35 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     vscode.window.showInformationMessage('Kiro Presence: Reconnecting to Discord...');
   };
 
+  let connectionStatus = false;
+
+  const handleShowStatus = async () => {
+    const statusMessage = connectionStatus 
+      ? '✅ Kiro Presence is connected to Discord and active!'
+      : '❌ Kiro Presence is disconnected from Discord';
+    
+    const action = await vscode.window.showInformationMessage(
+      statusMessage,
+      'Open Settings',
+      'Reconnect',
+      'Diagnostics'
+    );
+    
+    switch (action) {
+      case 'Open Settings':
+        vscode.commands.executeCommand('workbench.action.openSettings', '@ext:ts2gamer22.kiro-activity-status');
+        break;
+      case 'Reconnect':
+        handleReconnect();
+        break;
+      case 'Diagnostics':
+        handleDiagnostics();
+        break;
+    }
+  };
+
   const handleOpenSettings = () => {
-    vscode.commands.executeCommand('workbench.action.openSettings', 'Kiro Discord Presence');
+    vscode.commands.executeCommand('workbench.action.openSettings', '@ext:ts2gamer22.kiro-activity-status');
   };
 
   const handleDiagnostics = () => {
@@ -60,7 +83,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
   };
 
   disposeAll = [
-    vscode.commands.registerCommand('kiroPresence.toggle', handleToggle),
+    vscode.commands.registerCommand('kiroPresence.showStatus', handleShowStatus),
     vscode.commands.registerCommand('kiroPresence.reconnect', handleReconnect),
     vscode.commands.registerCommand('kiroPresence.openSettings', handleOpenSettings),
     vscode.commands.registerCommand('kiroPresence.diagnostics', handleDiagnostics),
@@ -73,8 +96,14 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
     config.get<string>('discordClientId') || process.env[ENV_CLIENT_ID] || DEFAULT_DISCORD_CLIENT_ID
   ).trim();
   ipcClient = new DiscordIpcClient({ clientId: clientId || DEFAULT_DISCORD_CLIENT_ID, logger });
-  ipcClient.on('connected', () => status.setConnected(true));
-  ipcClient.on('disconnected', () => status.setConnected(false));
+  ipcClient.on('connected', () => {
+    connectionStatus = true;
+    status.setConnected(true);
+  });
+  ipcClient.on('disconnected', () => {
+    connectionStatus = false;
+    status.setConnected(false);
+  });
   ipcClient.connect();
 
   // Activities

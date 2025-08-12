@@ -66,7 +66,6 @@ If you want to use your own Discord app with custom images:
 ## Settings
 
 ### Core Settings
-- `kiroPresence.enabled` (boolean, default true) - Master toggle
 - `kiroPresence.discordClientId` (string, default: "1403518715407892590") - Your Discord Application Client ID. Uses default Kiro app if not changed.
 - `kiroPresence.debug` (boolean, default false) - Enable verbose logging
 
@@ -85,10 +84,19 @@ If you want to use your own Discord app with custom images:
 
 ## Commands
 
-- **Kiro Presence: Toggle** (`kiroPresence.toggle`) - Enable/disable quickly
+- **Kiro Presence: Show Status** (`kiroPresence.showStatus`) - Show connection status with quick actions
 - **Kiro Presence: Reconnect** (`kiroPresence.reconnect`) - Force Discord reconnection
 - **Kiro Presence: Open Settings** (`kiroPresence.openSettings`) - Open extension settings
 - **Kiro Presence: Diagnostics** (`kiroPresence.diagnostics`) - Show connection and config info
+
+## Status Bar
+
+Click the **Kiro Presence** status bar item to:
+- ✅ See if you're connected to Discord
+- 🔧 Quick access to Settings, Reconnect, or Diagnostics
+- 📊 Check connection status at a glance
+
+> **Note**: To disable the extension, use VS Code's extension manager instead of a separate toggle.
 
 ## Development
 

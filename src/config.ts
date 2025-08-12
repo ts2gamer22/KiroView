@@ -1,7 +1,6 @@
 import * as vscode from 'vscode';
 
 export type KiroPresenceConfig = {
-  enabled: boolean;
   discordClientId?: string;
   showFileName: boolean;
   showWorkspaceName: boolean;
@@ -24,7 +23,6 @@ export const getConfig = (): vscode.WorkspaceConfiguration =>
 export const readEffectiveConfig = (): KiroPresenceConfig => {
   const cfg = getConfig();
   return {
-    enabled: cfg.get<boolean>('enabled', true),
     discordClientId: cfg.get<string>('discordClientId'),
     showFileName: cfg.get<boolean>('showFileName', false),
     showWorkspaceName: cfg.get<boolean>('showWorkspaceName', false),

@@ -12,8 +12,6 @@ export const registerDebugActivity = ({ env, client }: DebugActivityOptions): vs
 
   const updateDebug = (session: vscode.DebugSession | undefined) => {
     const cfg = vscode.workspace.getConfiguration('kiroPresence');
-    const enabled = cfg.get<boolean>('enabled', true);
-    if (!enabled) return;
 
     if (session) {
       client.setActivity({

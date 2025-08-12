@@ -2,7 +2,7 @@
   "name": "kiro-activity-status",
   "displayName": "KiroView: Discord Rich Presence for Kiro",
   "description": "Show your coding activity on Discord - supports Kiro IDE",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "ts2gamer22",
   "license": "MIT",
   "repository": {
@@ -41,8 +41,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "kiroPresence.toggle",
-        "title": "Kiro Presence: Toggle"
+        "command": "kiroPresence.showStatus",
+        "title": "Kiro Presence: Show Status"
       },
       {
         "command": "kiroPresence.reconnect",
@@ -60,11 +60,7 @@
     "configuration": {
       "title": "Discord Rich Presence",
       "properties": {
-        "kiroPresence.enabled": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enable Discord Rich Presence integration."
-        },
+
         "kiroPresence.discordClientId": {
           "type": "string",
           "default": "1403518715407892590",

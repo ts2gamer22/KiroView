@@ -17,11 +17,6 @@ export const registerEditorActivity = ({ env, client }: EditorActivityOptions): 
 
   const update = async () => {
     const cfg = vscode.workspace.getConfiguration('kiroPresence');
-    const enabled = cfg.get<boolean>('enabled', true);
-    if (!enabled) {
-      client.clearActivity();
-      return;
-    }
 
     const settings = {
       showFileName: cfg.get<boolean>('showFileName', false),
