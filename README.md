@@ -14,7 +14,7 @@ Activity status integration for Kiro IDE (and VS Code) with privacy‑first defa
 
 ## Language Icons
 
-The extension automatically maps file extensions and language IDs to Discord image assets. **You must upload these images to your Discord Developer App** under "Rich Presence" → "Art Assets" with the exact keys listed below.
+The extension automatically maps file extensions and language IDs to Discord image assets. **All language icons are pre-configured** and work immediately after installation.
 
 ### Core Technologies
 - **Web**: `html`, `css`, `javascript`, `typescript`, `react-light`, `vuejs-light`, `svelte`, `angular-light`
@@ -41,13 +41,14 @@ workers-dark, yarn-light
 
 - Desktop Discord client running (supports IPC)
 - Kiro IDE or VS Code desktop
-- Discord Developer App with Rich Presence assets uploaded
+
+That's it! The extension works immediately with no additional setup required.
 
 ## Quick Start
 
 1. **Install Extension**: Install from VS Code Marketplace or Open VSX
 2. **Discord App**: Ensure Discord desktop app is running
-3. **Ready to Use**: Extension works immediately with default Kiro Discord app
+3. **Ready to Use**: Extension works immediately - no configuration needed!
 
 ### For Custom Assets (Optional)
 If you want to use your own Discord app with custom images:
