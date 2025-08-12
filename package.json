@@ -1,6 +1,6 @@
 {
   "name": "kiro-activity-status",
-  "displayName": "Kiro Activity Status",
+  "displayName": "KiroView: Discord Rich Presence for Kiro",
   "description": "Show Kiro IDE activity on Discord",
   "version": "1.0.4",
   "publisher": "TheVibinNetwork",
